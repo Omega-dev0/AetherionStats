@@ -30,7 +30,8 @@ Bun.serve({
     hostname: "0.0.0.0",
     fetch(req) {
         const url = new URL(req.url);
-        let route = routes[url.pathname];
+        console.log(url.pathname,url.pathname.split(".")[0].split("/")[1]);
+        let route = routes[url.pathname.split(".")[0].split("/")[1]];
         if (route) {
             return route.handler(req);
         } else {

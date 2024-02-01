@@ -4,7 +4,9 @@ const HTMLConstants = {
                     <img src="/files/AetherionLogo320x320.png" alt="logo" style="height: 60px; width: 60px; margin-left: 10px; margin-top: 0px;">
                 </div>
                 <a style="color: white; margin-left: 1vw; font-family: 'GT Walsheim Bold', 'GT Walsheim Bold Placeholder', sans-serif; text-decoration:none; font-size:3rem" href="/home">Aetherion</a>
-</div>`
+                <a style="color: white; margin-left: auto; margin-right:3vw; font-family: 'GT Walsheim Bold', 'GT Walsheim Bold Placeholder', sans-serif; text-decoration:none; font-size:2rem" href="https://www.roblox.com/games/13630165489/Aetherion">Play now</a>
+                </div>
+`
 }
 
 

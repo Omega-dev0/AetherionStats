@@ -27,3 +27,25 @@ body{
     width: 80%;
     text-align: center;
 }
+
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -1000px 0
+    }
+    100%{
+        background-position: 1000px 0
+    }
+}
+
+.placeholder {
+    animation-duration: 15s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #2e2e2e 8%, #4d4d4d 18%, #2e2e2e 33%);
+
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}

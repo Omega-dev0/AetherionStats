@@ -43,13 +43,12 @@
         appearance: none;
         position: relative;
 
-        transition: all .3 var(--bez);
-        transition-property: width, border-radius;
         z-index: 1;
         border: 0;
     }
     .inputForm1 > button{
         display: block;
+        visibility: visible;
         position: absolute;
         top: 0;
         right: -3.5rem;
@@ -66,7 +65,8 @@
     }
     .inputForm1:not([value=""]):not(:focus):invalid {
          button {
-            display: none;
+            display: block;
+            visibility: hidden;
          }
     }
 </style>

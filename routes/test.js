@@ -2,7 +2,10 @@
 let module = {
     name: "test",
     handler: async function (req) {
-        return new Response("Hello world");
+        return {
+            type:"html",
+            body: "Hello world"
+        }
     }
 };
 

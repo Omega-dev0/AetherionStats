@@ -6,6 +6,9 @@ const routesFolder = "./routes";
 
 let routes = {}
 
+const HTMLGenerator = require("./modules/HTMLConstants.js").default;
+
+
 async function loadConfig() {
 
     // Load routes
@@ -28,12 +31,25 @@ Bun.serve({
     development: true,
     port: 80,
     hostname: "0.0.0.0",
-    fetch(req) {
+    async fetch(req) {
         const url = new URL(req.url);
         console.log(url.pathname,url.pathname.split(".")[0].split("/")[1]);
         let route = routes[url.pathname.split(".")[0].split("/")[1]];
+        if (url.pathname == "/") {
+            return Response.redirect('/home', 302);
+        }
         if (route) {
-            return route.handler(req);
+            let response = await route.handler(req);
+            if(response.type == "html"){
+                let body = response.body;
+                body = body.replaceAll("{{metadata}}", HTMLGenerator.getMetadataHTML(route.title || route.name));
+
+                body = HTMLGenerator.replaceConstants(body)
+
+                return new Response(body, { headers: { "Content-Type": "text/html" } });
+            }else{
+                return response.data
+            }
         } else {
             return new Response("Not found", { status: 404 })
         }

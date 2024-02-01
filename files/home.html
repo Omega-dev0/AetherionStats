@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{metadata}}
+    <meta name="description" content="Check your stats on Aetherion here!">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aetherion.omegadev.xyz/home" />
+    <meta property="og:image" content="/files/AetherionThumbail320x320.png" />
+    <meta property="og:description" content="Check your stats on Aetherion here!" />
+
+    <meta name="theme-color" content="#FF0000">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Poppins:300,400,600,700&amp;lang=en" />
+</head>
+
+<style>
+    :root{
+        --bez: cubic-bezier(0, 0, 0.43, 1.49);
+    }
+    .container{  
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 15vh;
+    }
+    .inputForm1{
+        background-color: rgba(255, 255, 255, 0);
+        border-radius: 30px;
+        width: 40rem;
+        height: 5rem;
+        margin-top: 5vh;
+        position: relative;
+    }
+    .inputForm1 > input[type=text] {
+        height: 5rem;
+        font-size: 1.8rem;
+        color: #090a0f;
+        outline: 0;
+        width: 100%;
+        background-color: white;
+        padding: 0 1.6rem;
+        border-radius: 30px;
+        appearance: none;
+        position: relative;
+
+        transition: all .3 var(--bez);
+        transition-property: width, border-radius;
+        z-index: 1;
+        border: 0;
+    }
+    .inputForm1 > button{
+        display: block;
+        position: absolute;
+        top: 0;
+        right: -3.5rem;
+        width: 6rem;
+        height: 100%;
+        font-weight: bold;
+        background: #3cb4e4;
+        border-radius: 0 30px 30px 0;
+        z-index: 2;
+        color: white;
+        border: 0;
+        font-size: 3rem;
+        cursor: pointer;
+    }
+    .inputForm1:not([value=""]):not(:focus):invalid {
+         button {
+            display: none;
+         }
+    }
+</style>
+<body>
+    <div class="main">
+        {{topbar}}
+        <div class="container" style="width: 100%; height: auto;">
+
+                <span class="big-title">Aetherion statistics viewer</span>
+                <span style="color: white; font-family: 'Poppins', sans-serif; font-size: 1.5vw; margin-top: 2vh;">Check your statistics on Aetherion</span>
+                <form class="inputForm1" onsubmit="event.preventDefault();">
+                    <input id="username" type="text" placeholder="Roblox Username..." autofocus required onkeyup="this.setAttribute('value', this.value);" & input:not([value=""]):not(:focus):invalid>
+                    <button type="submit" id="SearchUsername">Go</button>
+                </form>
+        </div>
+</body>
+<script>
+    function searchUsername(){
+        var username = document.getElementById("username").value;
+        window.location.href = "/user/" + username;
+    }
+
+    document.getElementById("SearchUsername").addEventListener("click", searchUsername);
+    document.getElementById("SearchUsername").addEventListener("keydown", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            searchUsername();
+        }
+    });
+</script>
+</html>

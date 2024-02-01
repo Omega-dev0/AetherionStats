@@ -2,7 +2,10 @@
 let module = {
     name: "favicon",
     handler: async function (req) {
-        return new Response(Bun.file("./files/AetherionLogo320x320.png"));
+        return {
+            type:"file",
+            data: new Response(Bun.file("./files/favicon.png"))
+        }
     }
 };
 

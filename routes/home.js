@@ -1,8 +1,17 @@
 
 let module = {
     name: "home",
+    title: "Aetherion Stats",
     handler: async function (req) {
-        return new Response("Hello world");
+
+        let file = Bun.file("./files/home.html");
+        let data = await file.text();
+
+        return {
+            type:"html",
+            body: data
+        }
+        
     }
 };
 

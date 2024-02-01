@@ -115,6 +115,21 @@
         </div>
 
         <div class="container" style="width: 100%; height: auto;">
+            <div id="chartContainer"class="mainStats box" style="width: 80%; padding: 0 0vh; display:flex; flex-direction: row; position: relative; align-items: center;">
+                <div style="align-items: center; display:flex; flex-direction: column; position: relative;">
+                    <h1 class="title" style="align-content:  center;">Platform used</h1>
+                    <canvas id="mobileRatio" style="padding: 5rem;"></canvas>
+                </div>
+                <div style="align-items: center; display:flex; flex-direction: column; position: relative; margin-left: 10rem;">
+                    <h1 class="title" style="align-content:  center;">Coming soon</h1>
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container" style="width: 100%; height: auto;">
             <div id="chartContainer"class="mainStats box" style="width: 80%; padding: 0 0vh; display:flex; flex-direction: column; position: relative; align-items: center;">
                 <h1 class="title">Kill distance repartition</h1>
                 <label class="subtitle" id="averageKillReach">Average: </label>
@@ -166,6 +181,7 @@
 
         let killsData = await getRBLXKills(ID)
         DATA = killsData
+        console.log(killsData)
         document.getElementById("kills").innerHTML = killsData.kills
         document.getElementById("deaths").innerHTML = killsData.deaths
         document.getElementById("kd").innerHTML = killsData.kd
@@ -222,6 +238,21 @@
                  }
                 }    
             }   
+        });
+
+        const ctx3 = document.getElementById('mobileRatio');
+
+        new Chart(ctx3, {
+            type: 'doughnut',
+            data: {
+                labels: ['Mobile', 'PC'],
+                datasets: [{
+                    label: 'Platform used',
+                    data: [DATA.mobileRatio*100, 100 - DATA.mobileRatio*100],
+                    hoverOffset: 1,
+                    borderWidth: 0
+                }]
+            }  
         });
     }
 

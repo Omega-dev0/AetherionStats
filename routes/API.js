@@ -20,6 +20,10 @@ let module = {
                     killDistanceDistribution: {},
                     deathDistanceDistribution: {},
 
+                    mobileRatio: 0,
+
+                    opponents: {},
+
                     kd: 0,
 
                     userId: userId
@@ -33,9 +37,12 @@ let module = {
 
 
                 let count = 0
+                let killCount = 0;
+                let deathCount = 0;
 
                 for (let kill of process.KILLS) {
                     if (kill.killerData.userId == userId && kill.victimData.userId != userId) {
+                        killCount++;
                         stats.averageFps += kill.killerData.fps;
                         stats.averagePing += kill.killerData.ping;
 
@@ -48,10 +55,24 @@ let module = {
                             stats.killDistanceDistribution[distance] = 1;
                         }
 
+                        if (stats.opponents[kill.victimData.userId]) {
+                            stats.opponents[kill.victimData.userId].loss++; 
+                        }else{
+                            stats.opponents[kill.victimData.userId] = {
+                                wins: 0,
+                                loss: 1,
+                            }
+                        }
+
+                        if(kill.killerData.isMobile == true){
+                            stats.mobileRatio++;
+                        }
+
                         count++;
                     } else if (kill.victimData.userId == userId && kill.killerData.userId != userId) {
-                        stats.averageFps += kill.killerData.fps;
-                        stats.averagePing += kill.killerData.ping;
+                        deathCount++;
+                        stats.averageFps += kill.victimData.fps;
+                        stats.averagePing += kill.victimData.ping;
                         stats.deaths++;
 
                         let distance = Math.floor(kill.distance);
@@ -60,6 +81,15 @@ let module = {
                             stats.deathDistanceDistribution[distance]++;
                         } else {
                             stats.deathDistanceDistribution[distance] = 1;
+                        }
+
+                        if (stats.opponents[kill.victimData.userId]) {
+                            stats.opponents[kill.victimData.userId].win++;
+                        }else{
+                            stats.opponents[kill.killerData.userId] = {
+                                wins: 1,
+                                loss: 0,
+                            }
                         }
 
                         count++;
@@ -73,10 +103,27 @@ let module = {
                     })
                 }
 
+                /*
+                stats.opponents = stats.opponents.map((key, value) => {
+                    return {
+                        userId: key,
+                        wins: value.wins,
+                        loss: value.loss
+                    }
+                })
+                stats.opponents.sort((a, b) => {
+                    return a.wins + a.loss - (b.wins + b.loss); 
+                })
+
+                stats.opponents = stats.opponents.slice(0, 10);
+                */
+                stats.opponents = {}
+
                 stats.averageFps = Math.floor(stats.averageFps / count);
                 stats.averagePing = Math.floor(stats.averagePing / count);
-                stats.averageKillReach = Math.floor(stats.averageKillReach / count * 100) / 100;
-                stats.averageDeathReach = Math.floor(stats.averageDeathReach / count * 100) / 100;
+                stats.averageKillReach = Math.floor(stats.averageKillReach / killCount * 100) / 100;
+                stats.averageDeathReach = Math.floor(stats.averageDeathReach / deathCount * 100) / 100;
+                stats.mobileRatio = Math.floor(stats.mobileRatio / killCount * 100) / 100;
                 stats.kd = Math.floor(stats.kills / stats.deaths * 100) / 100;
 
                 resolve({

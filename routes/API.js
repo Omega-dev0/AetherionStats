@@ -47,7 +47,7 @@ let module = {
                         stats.averagePing += kill.killerData.ping;
 
                         stats.kills++;
-                        let distance = Math.floor(kill.distance);
+                        let distance = Math.min(Math.max(Math.floor(kill.distance), -1), 20)
                         stats.averageKillReach += distance;
                         if (stats.killDistanceDistribution[distance]) {
                             stats.killDistanceDistribution[distance]++;
@@ -75,7 +75,7 @@ let module = {
                         stats.averagePing += kill.victimData.ping;
                         stats.deaths++;
 
-                        let distance = Math.floor(kill.distance);
+                        let distance = Math.min(Math.max(Math.floor(kill.distance), -1), 20)
                         stats.averageDeathReach += distance;
                         if (stats.deathDistanceDistribution[distance]) {
                             stats.deathDistanceDistribution[distance]++;

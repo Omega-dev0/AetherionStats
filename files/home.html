@@ -86,7 +86,7 @@
 <script>
     function searchUsername(){
         var username = document.getElementById("username").value;
-        window.location.href = "/user/" + username;
+        window.location.href = "/user?username=" + username;
     }
 
     document.getElementById("SearchUsername").addEventListener("click", searchUsername);

@@ -42,7 +42,7 @@ loadConfig();
 
 Bun.serve({
     development: args["--dev"] == "true",
-    port: args["--dev"] == "true" ? 403 : 80,
+    port: args["--port"] || 80,
     hostname: "0.0.0.0",
     async fetch(req) {
         const url = new URL(req.url);

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{metadata}}
+    <meta name="description" content="Check your stats on Aetherion here!">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aetherion.omegadev.xyz" />
+    <meta property="og:image" content="/files/AetherionThumbail320x320.png" />
+    <meta property="og:description" content="Check your stats on Aetherion here!" />
+
+    <meta name="theme-color" content="#FF0000">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Poppins:300,400,600,700&amp;lang=en" />
+</head>
+
+<style>
+    :root{
+        --bez: cubic-bezier(0, 0, 0.43, 1.49);
+    }
+    body{
+        background: radial-gradient(ellipse at bottom, #e43c3c 0%, #090a0f 100%);
+        backdrop-filter: blur(0px);
+    }
+    .container{  
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 15vh;
+    }
+    .box{
+        background-color: rgb(29, 29, 29);
+    }
+
+    .text{
+        color: white;
+    }
+
+    .title{
+        color: white;
+        font-size: 3rem;
+        font-family: "Poppins", sans-serif;
+    }
+</style>
+<body>
+    <div class="main" style="display: flex; align-items: center; justify-content: center; flex-direction: column; margin-top: 10%;">
+        <span class="big-title" id="error" style="word-wrap: break-word;">Error</span>
+    </div>
+</body>
+<script>
+    let url = new URL(window.location.href);
+    let error = url.searchParams.get("error");
+    document.getElementById("error").innerHTML = `<span style="color:red">ERROR</span> <br>${error}`;
+</script>
+</html>

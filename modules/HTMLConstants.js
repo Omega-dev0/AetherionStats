@@ -3,7 +3,7 @@ const HTMLConstants = {
                 <div class="logo">
                     <img src="/files/AetherionLogo320x320.png" alt="logo" style="height: 60px; width: 60px; margin-left: 10px; margin-top: 0px;">
                 </div>
-                <h1 style="color: white; margin-left: 1vw; font-family: 'GT Walsheim Bold', 'GT Walsheim Bold Placeholder', sans-serif;">Aetherion</h1>
+                <a style="color: white; margin-left: 1vw; font-family: 'GT Walsheim Bold', 'GT Walsheim Bold Placeholder', sans-serif; text-decoration:none; font-size:3rem" href="/home">Aetherion</a>
 </div>`
 }
 
@@ -24,7 +24,7 @@ let module = {
         <link rel="icon" href="/favicon">
         <link rel="stylesheet" href="/files/main.css">
         <meta property="og:title" content="${title}" />
-        <meta name="twitter:card" content="summary_large_image">
+        <meta name="theme-color" content="#34d5eb">
         `;  
 
     },

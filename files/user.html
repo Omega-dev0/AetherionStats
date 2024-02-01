@@ -16,6 +16,13 @@
     :root{
         --bez: cubic-bezier(0, 0, 0.43, 1.49);
     }
+
+    body{
+        overflow-x: hidden;
+        height: 100%;
+        background: radial-gradient(ellipse at top, #3cb4e4 0%, #090a0f 100%);
+    }
+
     .container{  
         display: flex;
         flex-direction: column;
@@ -29,11 +36,18 @@
 
     .text{
         color: white;
+        font-family: "Poppins", sans-serif;
+        font-size: 2rem;
     }
 
     .title{
         color: white;
         font-size: 3rem;
+        font-family: "Poppins", sans-serif;
+    }
+    .subtitle{
+        color: rgb(100, 100, 100);
+        font-size: 1.3rem;
         font-family: "Poppins", sans-serif;
     }
 </style>
@@ -45,7 +59,7 @@
                 <!-- Avatar IMG -->
                 <div style="width: 15vw; aspect-ratio: 1; margin: 3vw; position: relative; display:flex;">
                     <div id="avatarImg" style="position: absolute; z-index: 4; display: none; width: 100%; height: 100%;">
-                        <img id="profileImg" src="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-04773631ED1E1B81AB2E5D782E903EF9-Png/150/150/AvatarHeadshot/Png/noFilter" style="width: 100%; height: 100%; object-fit: cover;" onload="document.getElementById('imgPlaceholder').style.display = 'none';document.getElementById('avatarImg').style.display = 'block' ">
+                        <img id="profileImg" src="" style="width: 100%; height: 100%; object-fit: cover;" onload="document.getElementById('imgPlaceholder').style.display = 'none';document.getElementById('avatarImg').style.display = 'block' ">
                     </div>
                     <div id="imgPlaceholder" class="placeholder" style="position: absolute; z-index: 1;" >
                        
@@ -54,30 +68,165 @@
                     <!-- Info right tab -->
                     <div>
                     <!-- Username -->
-                    <div style="width: 25vw; height: 3rem; margin: 3vw; position: relative;">
-                      <h1 class="title">Omega77073</h1>
+                    <div style="width: 25vw; height: 3rem; margin: 3vw 3vw 0 0; position: relative;">
+                        <div>
+                            <h1 class="title" id="username">-----------</h1>
+                        </div>
+                    </div>
+
+                    <!-- Display Name -->
+                    <div style="width: 25vw; height: 3rem; margin: 0vw 3vw 0 0; position: relative;">
+                        <div style="position: relative;">
+                            <div id="displayNamePlaceHolder" class="placeholder" style="position: absolute; z-index: 1;" >
+                       
+                            </div>
+                            <h1 class="subtitle" id="displayName">@Omega77073</h1>
+                        </div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="box" style="width: 100%; padding: 0 0; display:flex; flex-direction: row; margin-top: 3rem;">
+                        <div style="position: relative;">
+                            <div id="C1Placeholder" class="placeholder" style="position: absolute; z-index: 1; height: 100%; width: 100%;" >
+                       
+                            </div>
+                            <div>
+                               <label class="text">Total kills: <span style="font-weight: 600;" id="kills">1500</span></label>
+                            </div>
+                            <div>
+                             <label class="text">KD: <span style="font-weight: 600;" id="kd">1.75</span></label>
+                            </div>
+                            
+                        </div>
+                        <div style="margin-left: 8rem; position: relative;">
+                            <div id="C2Placeholder" class="placeholder" style="position: absolute; z-index: 1; height: 100%; width: 100%;" >
+                       
+                            </div>
+                            <div>
+                               <label class="text">Total Deaths: <span style="font-weight: 600;" id="deaths">1500</span></label>
+                            </div>
+                            <div>
+                             <label class="text">Average ping: <span style="font-weight: 600;" id="ping">150ms</span></label>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>   
+        </div>
+
+        <div class="container" style="width: 100%; height: auto;">
+            <div id="chartContainer"class="mainStats box" style="width: 80%; padding: 0 0vh; display:flex; flex-direction: column; position: relative; align-items: center;">
+                <h1 class="title">Kill distance repartition</h1>
+                <label class="subtitle" id="averageKillReach">Average: </label>
+                <canvas id="killDistanceDistribution" style="padding: 5rem;"></canvas>
+            </div>
+        </div>
+
+        <div class="container" style="width: 100%; height: auto;">
+            <div id="chartContainer"class="mainStats box" style="width: 80%; padding: 0 0vh; display:flex; flex-direction: column; position: relative; align-items: center;">
+               <h1 class="title">Death distance repartition</h1>
+               <label class="subtitle" id="averageDeathReach">Average: </label>
+               <canvas id="deathDistanceDistribution" style="padding: 5rem;"></canvas>
             </div>
         </div>
 </body>
 <script src="/files/core.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.umd.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     let ID
+    let DATA
 
     async function getId(){
         var url = new URL(window.location.href);
         var username = url.searchParams.get("username");
+        document.getElementById("username").innerHTML = username
 
-        if(username == null){
-            window.location.href = "/home";
+
+        if(username == null || username == undefined || username == ""){
+            window.location.href = "/error?error=No username provided";
             return
         }
 
-        ID = await getRBLXIDFromUsername(username)
-        console.log(ID)
+        userData = (await getRBLXIDFromUsername(username)).data
+        console.log(userData,userData.length)
+        if(userData.length == 0){
+            window.location.href = "/error?error=Invalid username";
+            return
+        }
+        userData = userData[0]
+        
+        ID = userData.id
+
+        let avatar = await getRBLXAvatar(ID)
+        console.log(avatar,avatar.length)
+        if(avatar.length > 0){
+            avatar = avatar[0]
+            document.getElementById("profileImg").src = avatar.imageUrl
+        }
+
+        let killsData = await getRBLXKills(ID)
+        DATA = killsData
+        document.getElementById("kills").innerHTML = killsData.kills
+        document.getElementById("deaths").innerHTML = killsData.deaths
+        document.getElementById("kd").innerHTML = killsData.kd
+        document.getElementById("ping").innerHTML = killsData.averagePing+"ms"
+
+        document.getElementById("averageDeathReach").innerHTML = "Average: "+killsData.averageDeathReach+" studs"
+        document.getElementById("averageKillReach").innerHTML = "Average: "+killsData.averageKillReach+" studs"
+
+        document.getElementById("C1Placeholder").style.display = "none"
+        document.getElementById("C2Placeholder").style.display = "none"
+
+        document.getElementById("displayName").innerHTML = "@" + userData.displayName
+        document.getElementById("displayNamePlaceHolder").style.display = "none"
     }
 
-    getId()
+    async function Draw(){
+        const ctx = document.getElementById('killDistanceDistribution');
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+          labels: Object.keys(DATA.killDistanceDistribution),
+          datasets: [{
+              label: 'Kill count per distance',
+                 data: Object.values(DATA.killDistanceDistribution),
+                 borderWidth: 1
+              }]
+          },
+          options: {
+             scales: {
+                 y: {
+                     beginAtZero: true
+                 }
+                }    
+            }   
+        });
+
+        const ctx2 = document.getElementById('deathDistanceDistribution');
+
+        new Chart(ctx2, {
+          type: 'bar',
+          data: {
+          labels: Object.keys(DATA.deathDistanceDistribution),
+          datasets: [{
+              label: 'Kill count per distance',
+                 data: Object.values(DATA.deathDistanceDistribution),
+                 borderWidth: 1
+              }]
+          },
+          options: {
+             scales: {
+                 y: {
+                     beginAtZero: true
+                 }
+                }    
+            }   
+        });
+    }
+
+    getId().then(() => {
+        Draw()
+    })
 </script>
 </html>

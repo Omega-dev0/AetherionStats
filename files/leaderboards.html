@@ -16,52 +16,18 @@
     :root{
         --bez: cubic-bezier(0, 0, 0.43, 1.49);
     }
+
+    body{
+        overflow: hidden;
+    }
+
     .container{  
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin-top: 15vh;
-    }
-    .inputForm1{
-        background-color: rgba(255, 255, 255, 0);
-        border-radius: 30px;
-        width: 40rem;
-        height: 5rem;
         margin-top: 5vh;
-        position: relative;
-    }
-    .inputForm1 > input[type=text] {
-        height: 5rem;
-        font-size: 1.8rem;
-        color: #090a0f;
-        outline: 0;
-        width: 100%;
-        background-color: white;
-        padding: 0 1.6rem;
-        border-radius: 30px;
-        appearance: none;
-        position: relative;
-
-        z-index: 1;
-        border: 0;
-    }
-    .inputForm1 > button{
-        display: block;
-        visibility: visible;
-        position: absolute;
-        top: 0;
-        right: -3.5rem;
-        width: 6rem;
-        height: 100%;
-        font-weight: bold;
-        background: #3cb4e4;
-        border-radius: 0 30px 30px 0;
-        z-index: 2;
-        color: white;
-        border: 0;
-        font-size: 3rem;
-        cursor: pointer;
+        width: 80%;
     }
 
     .small-title{
@@ -71,23 +37,54 @@
         margin-top: 2vh;
     }
 
-    .inputForm1:not([value=""]):not(:focus):invalid {
-         button {
-            display: block;
-            visibility: hidden;
-         }
+    .leaderboard{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 2vw;
+        padding: 2vw;
+        background-color: #090a0f;
+        border-radius: 10px;
+    }
+
+    .leaderboard-table{
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1vh;
+    }
+
+    .leaderboard-table > .entry{
+        display: flex;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.6vw;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .entry > a{
+        color: white;
+        text-decoration: none;
+        margin-right: 0.3vw;
+    }
+    .entry > a:hover{
+        color: white;
+        text-decoration: underline;
+    }
+
+    .entry > span{
+        color: white;
+        font-weight: bold;
+    }
+
+    .big-title{
+        font-size: 4vw;
     }
 
     @media only screen and (max-width: 800px) {
-        .inputForm1{
-            width: 70vw;
-            right: 3.5vw;
-        }
-
-        .inputForm1 > input[type=text] {
-            font-size: 3.5vw;
-            height: 10vw;
-        }
 
         .small-title{
             font-size: 4vw;
@@ -98,27 +95,56 @@
     <div class="main">
         {{topbar}}
         <div class="container" style="width: 100%; height: auto;">
-
-                <span class="big-title">Aetherion statistics viewer</span>
-                <span class="small-title">Check your statistics on Aetherion</span>
-                <form class="inputForm1" onsubmit="event.preventDefault();">
-                    <input id="username" type="text" placeholder="Roblox Username..." autofocus required onkeyup="this.setAttribute('value', this.value);" & input:not([value=""]):not(:focus):invalid>
-                    <button type="submit" id="SearchUsername">Go</button>
-                </form>
+                <span class="big-title">Leaderboards</span>
+                <div style="display: flex; flex-direction: row;">
+                    <div class="leaderboard">
+                        <span class="small-title">Top 10 Kills</span>
+                        <div class="leaderboard-table" id="kills">
+                            
+                        </div>
+                    </div>
+                    <div class="leaderboard">
+                        <span class="small-title">Top 10 KD</span>
+                        <div class="leaderboard-table" id="kd">
+                            
+                        </div>
+                    </div>
+                    <div class="leaderboard">
+                        <span class="small-title">Top 10 Deaths</span>
+                        <div class="leaderboard-table" id="deaths">
+                            
+                        </div>
+                    </div>
+                </div>
         </div>
 </body>
+<script src="/files/core.js"></script>
 <script>
-    function searchUsername(){
-        var username = document.getElementById("username").value;
-        window.location.href = "/user?username=" + username;
-    }
-
-    document.getElementById("SearchUsername").addEventListener("click", searchUsername);
-    document.getElementById("SearchUsername").addEventListener("keydown", function(event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            searchUsername();
+    async function loadData(){
+        const data = await getLeaderboards();
+        console.log(data);
+        function getUsernameFromid(id){
+            let filter = data.userInfo.filter(user => user.id == id)
+            return filter.length > 0 ? filter[0].name : "Unknown";
         }
-    });
+
+    
+        for(kill of data.kills){
+            let div = document.getElementById("kills");
+            let username = getUsernameFromid(kill.userId)
+            div.innerHTML += `<div class="entry"><a href="/user?username=${username}">${username}: </a><span>${kill["killCount"]}</span><br></div>`;
+        }
+        for(death of data.deaths){
+            let div = document.getElementById("deaths");
+            let username = getUsernameFromid(death.userId)
+            div.innerHTML += `<div class="entry"><a href="/user?username=${username}">${username}: </a><span>${death["deathCount"]}</span><br></div>`;
+        }
+        for(kd of data.KD){
+            let div = document.getElementById("kd");
+            let username = getUsernameFromid(kd.userId)
+            div.innerHTML += `<div class="entry"><a href="/user?username=${username}">${username}: </a><span>${kd["KD"]}</span><br></div>`;
+        }
+    }
+    loadData()
 </script>
 </html>

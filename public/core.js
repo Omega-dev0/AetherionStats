@@ -21,3 +21,9 @@ async function getRBLXKills(userId){
     let data = await resp.json()
     return data
 }
+
+async function getLeaderboards(){
+    let resp =  await fetch(`/api/leaderboards`)
+    let data = await resp.json()
+    return data
+}

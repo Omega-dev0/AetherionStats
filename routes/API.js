@@ -134,6 +134,92 @@ let module = {
                 })
             }
 
+            if (path == "leaderboards") {
+                let players = {};
+                for (let kill of process.KILLS) {
+                    if (players[kill.killerData.userId]) {
+                        players[kill.killerData.userId].killCount++;
+                    } else {
+                        players[kill.killerData.userId] = {
+                            killCount: 1,
+                            deathCount: 0,
+                            KD: 0
+                        }
+                    }
+
+                    if (players[kill.victimData.userId]) {
+                        players[kill.victimData.userId].deathCount++;
+                    } else {
+                        players[kill.victimData.userId] = {
+                            killCount: 0,
+                            deathCount: 1,
+                            KD: 0
+                        }
+                    }
+                }
+
+
+                for (let player in players) {
+                    players[player].KD = Math.floor(players[player].killCount / players[player].deathCount * 100) / 100;
+                }
+
+                let KillsSortedPlayers = Object.keys(players).sort((a, b) => players[b].killCount - players[a].killCount).slice(0, 10);
+                let DeathsSortedPlayers = Object.keys(players).sort((a, b) => players[b].deathCount - players[a].deathCount).slice(0, 10);
+                
+                let KDSortedPlayers = Object.keys(players).filter((a) => players[a].deathCount > 5 && players[a].killCount > 50);
+                //console.log(KDSortedPlayers,KDSortedPlayers.map((a) => players[a]))
+                KDSortedPlayers = KDSortedPlayers.sort((a, b) => players[b].KD - players[a].KD).slice(0, 10);
+
+                let uniqueUserIds = []
+
+                let FinalData = {
+                    kills: [],
+                    deaths: [],
+                    KD: []
+                }
+
+                for (let player of KillsSortedPlayers) {
+                    FinalData.kills.push({userId:player, killCount: players[player].killCount})
+                    if(!uniqueUserIds.includes(player)){
+                        uniqueUserIds.push(player)
+                    }
+                }
+                for (let player of DeathsSortedPlayers) {
+                    FinalData.deaths.push({userId:player, deathCount: players[player].deathCount})
+                    if(!uniqueUserIds.includes(player)){
+                        uniqueUserIds.push(player)
+                    }
+                }
+                for (let player of KDSortedPlayers) {
+                    FinalData.KD.push({userId:player, KD: players[player].KD})
+                    if(!uniqueUserIds.includes(player)){
+                        uniqueUserIds.push(player)
+                    }
+                }
+
+                fetch('https://users.roblox.com/v1/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        userIds: uniqueUserIds,
+                        excludeBannedUsers: false
+                    })
+                }).then(response => response.json().then(data => {
+                    resolve({
+                        type: "json",
+                        data: new Response(JSON.stringify({
+                            kills: FinalData.kills,
+                            deaths: FinalData.deaths,
+                            KD: FinalData.KD,
+                            userInfo: data.data,
+                            uniqueUserIds: uniqueUserIds
+                        }), { headers: { "Content-Type": "application/json" } })
+                    })
+                }))
+
+                
+            }
+
             else if (path == "rblxdata") {
                 let userId = url.searchParams.get("userId");
 
@@ -217,6 +303,9 @@ let module = {
                         })
                     });
             }
+
+
+
             else {
                 resolve({
                     type: "json",

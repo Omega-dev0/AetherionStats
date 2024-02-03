@@ -171,6 +171,30 @@ let module = {
 
 
             }
+
+            else if (path == "rblxinfo") {
+                let userId = url.searchParams.get("userId");
+                fetch('https://users.roblox.com/v1/users/'+userId, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' },
+
+                }).then(response => response.json())
+                    .then(data => {
+                        resolve({
+                            type: "json",
+                            data: new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json" } })
+                        })
+                    })
+                    .catch((error) => {
+                        resolve({
+                            type: "json",
+                            data: new Response(JSON.stringify({ status: 500 }), { headers: { "Content-Type": "application/json" } })
+                        })
+                    });
+
+
+            }
+
             
             else if (path == "rblxavatar") {
                 let userId = url.searchParams.get("userId");

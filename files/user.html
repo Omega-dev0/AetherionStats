@@ -152,25 +152,38 @@
     let DATA
 
     async function getId(){
-        var url = new URL(window.location.href);
-        var username = url.searchParams.get("username");
+        let url = new URL(window.location.href);
+        let username = url.searchParams.get("username");
         document.getElementById("username").innerHTML = username
 
+        let userId = url.searchParams.get("userId");
 
-        if(username == null || username == undefined || username == ""){
+        if((username == null || username == undefined || username == "")  && (userId == null || userId == undefined || userId == "")){
             window.location.href = "/error?error=No username provided";
             return
         }
 
-        userData = (await getRBLXIDFromUsername(username)).data
-        console.log(userData,userData.length)
-        if(userData.length == 0){
-            window.location.href = "/error?error=Invalid username";
-            return
+
+        if(username != null){
+            userData = userId = (await getRBLXIDFromUsername(username)).data
+            console.log(userData,userData.length)
+            if(userData.length == 0){
+                window.location.href = "/error?error=Invalid username";
+                return
+            }
+            userData = userData[0]
+            ID = userData.id
+        } else if(userId != null){
+            ID = userId
+            userData = await getRBLXInfo(ID)
+            if(userData.status == 500){
+                window.location.href = "/error?error=Invalid userId";
+                return
+            }
+            document.getElementById("username").innerHTML = userData.name
+            document.title = userData.name + "'s stats"
         }
-        userData = userData[0]
         
-        ID = userData.id
 
         let avatar = await getRBLXAvatar(ID)
         console.log(avatar,avatar.length)

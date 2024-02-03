@@ -5,11 +5,16 @@ async function getRBLXIDFromUsername(username){
 }
 
 async function getRBLXAvatar(userId){
-    let resp =  await fetch(`/api/rblxAvatar?userId=${userId}`)
+    let resp =  await fetch(`/api/rblxavatar?userId=${userId}`)
     let data = await resp.json()
     return data
 }
 
+async function getRBLXInfo(userId){
+    let resp =  await fetch(`/api/rblxinfo?userId=${userId}`)
+    let data = await resp.json()
+    return data
+}
 
 async function getRBLXKills(userId){
     let resp =  await fetch(`/api/kills?userId=${userId}`)

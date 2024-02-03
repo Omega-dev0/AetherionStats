@@ -26,7 +26,7 @@ let module = {
         <link rel="icon" href="/favicon">
         <link rel="stylesheet" href="/files/main.css">
         <meta property="og:title" content="${title}" />
-        <meta name="theme-color" content="#34d5eb">
+        <meta name="theme-color" content="#3CB4E4">
         `;  
 
     },

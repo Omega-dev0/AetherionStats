@@ -1,4 +1,6 @@
 
+const RLX_API_KEY = "3MABQQL8yESygySXSvx/8ZRSxqDtFsYKZF2KBmMaZ6s/dtb+"
+
 let module = {
     name: "api",
     handler: function (req) {

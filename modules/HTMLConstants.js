@@ -1,10 +1,11 @@
 const HTMLConstants = {
     "topbar":`<div class="topbar">
                 <div class="logo">
-                    <img src="/files/AetherionLogo320x320.png" alt="logo" style="height: 60px; width: 60px; margin-left: 10px; margin-top: 0px;">
+                    <img src="/files/AetherionLogo320x320.png" alt="logo" class="logo-image">
                 </div>
-                <a style="color: white; margin-left: 1vw; font-family: 'GT Walsheim Bold', 'GT Walsheim Bold Placeholder', sans-serif; text-decoration:none; font-size:3rem" href="/home">Aetherion</a>
-                <a style="color: white; margin-left: auto; margin-right:3vw; font-family: 'GT Walsheim Bold', 'GT Walsheim Bold Placeholder', sans-serif; text-decoration:none; font-size:2rem" href="https://www.roblox.com/games/13630165489/Aetherion">Play now</a>
+                <a class="topbar-title bold" href="/home" style="border:none">Aetherion</a>
+                <a class="topbar-title" style="" href="/leaderboards">Leaderboards</a>
+                <a class="topbar-title" style="" href="https://www.roblox.com/games/13630165489/Aetherion">Play now</a>
                 </div>
 `
 }
@@ -23,10 +24,10 @@ let module = {
         <title>${title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="Omega77073">
+        <meta name="theme-color" content="#36393F">
         <link rel="icon" href="/favicon">
         <link rel="stylesheet" href="/files/main.css">
         <meta property="og:title" content="${title}" />
-        <meta name="theme-color" content="#36393F"/>
         `;  
 
     },

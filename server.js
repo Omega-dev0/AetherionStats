@@ -40,26 +40,39 @@ async function loadConfig() {
 
 loadConfig();
 
+
+const CORS_HEADERS = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    'Access-Control-Allow-Headers': 'Content-Type',
+}
+
 Bun.serve({
     development: args["--dev"] == "true",
     port: args["--port"] || 80,
     hostname: "0.0.0.0",
     async fetch(req) {
         const url = new URL(req.url);
-        console.log(url.pathname,url.pathname.split(".")[0].split("/")[1]);
         let route = routes[url.pathname.split(".")[0].split("/")[1]];
+
+
         if (url.pathname == "/") {
             return Response.redirect('/home', 302);
         }
+        if (req.method === 'OPTIONS') {
+            const res = new Response('Departed', {headers: CORS_HEADERS});
+            return res;
+        }
         if (route) {
             let response = await route.handler(req);
+
             if(response.type == "html"){
                 let body = response.body;
                 body = body.replaceAll("{{metadata}}", HTMLGenerator.getMetadataHTML(response.title || route.title || route.name));
 
                 body = HTMLGenerator.replaceConstants(body)
 
-                return new Response(body, { headers: { "Content-Type": "text/html" } });
+                return new Response(body, { headers: { "Content-Type": "text/html", ...CORS_HEADERS} });
             }else{
                 return response.data
             }

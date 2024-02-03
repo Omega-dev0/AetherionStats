@@ -1,51 +1,111 @@
 main {
-    display: flex; align-items:flex-start; flex-direction: column;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
 }
-body{
-    margin: 0px;
-    background: radial-gradient(ellipse at bottom, #3cb4e4 0%, #090a0f 100%);
-    backdrop-filter: blur(100px);
-    height: 100vh;
+body {
+  margin: 0px;
+  background: radial-gradient(ellipse at bottom, #3cb4e4 0%, #090a0f 100%);
+  background-size: cover;
+  backdrop-filter: blur(100px);
+  height: 100vh;
 }
-.topbar{
-    width: 100vw;
-    background-color: rgb(0, 6, 24);
-    height: 60px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.big-title{
-    font-family: "Poppins", sans-serif;
-    font-size: 6vw;
-    color: white;
-    font-weight: 600;
-    letter-spacing: -4.4px;
-    -webkit-font-smoothing: antialiased;
-    word-wrap: break-word;
-    width: 80%;
-    text-align: center;
+.topbar {
+  width: 100vw;
+  background-color: rgb(0, 6, 24);
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-@keyframes placeHolderShimmer{
-    0%{
-        background-position: -1000px 0
-    }
-    100%{
-        background-position: 1000px 0
-    }
+.big-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 7rem;
+  color: white;
+  font-weight: 600;
+  letter-spacing: -4.4px;
+  -webkit-font-smoothing: antialiased;
+  word-wrap: break-word;
+  width: 80%;
+  text-align: center;
+}
+
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
 .placeholder {
-    animation-duration: 15s;
-    animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
-    animation-name: placeHolderShimmer;
-    animation-timing-function: linear;
-    background: linear-gradient(to right, #2e2e2e 8%, #4d4d4d 18%, #2e2e2e 33%);
+  animation-duration: 15s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #2e2e2e 8%, #4d4d4d 18%, #2e2e2e 33%);
 
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+
+.topbar-title {
+  color: white;
+  font-family: "GT Walsheim Bold", "GT Walsheim Bold Placeholder", sans-serif;
+  text-decoration: none;
+  font-size: 4vh;
+  padding-left: 1rem;
+  margin-left: 1rem;
+  border-left: white 3px solid;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.logo {
+    display: flex;
+  margin-left: 10px;
+  margin-top: 0px;
+}
+
+.logo-image {
+    height: 3rem;
+    aspect-ratio: 1;
+    margin-top: .5vh;
+    margin-left: 0%;
+  }
+
+  .topbar-title:not(.bold) {
+    font-size: 2vh;
+  }
+
+@media only screen and (max-width: 800px) {
+
+  .topbar-title:not(.bold) {
+    display: none;
+  }
+ 
+
+  .topbar-title {
+    font-size: 4vw;
+    margin-left: 1vw;
+    padding-left: 1vw;
+  }
+
+  .logo-image {
+    height: 3rem;
+    aspect-ratio: 1;
+    margin-top: .5vh;
+    margin-left: 0%;
+  }
+
+    .big-title {
+        font-size: 15vw;
+    }
+
 }
